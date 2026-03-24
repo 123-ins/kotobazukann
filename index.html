@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="小学生向けことば検索・漢字変換アプリ。算数・国語・理科・社会の教科書ことばを調べられます。">
+  <meta name="theme-color" content="#FF6B9D">
+
+  <!-- Apple PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ことばずかん">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+
+  <title>📚 ことばずかん</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="app-header">
+    <div class="app-title">
+      <span class="emoji">📚</span> ことばずかん
+    </div>
+    <div class="app-subtitle">しらべる・おぼえる・かんじにする</div>
+
+    <!-- タブ -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="panel-search">🔍 ことばをしらべる</button>
+      <button class="tab-btn" data-tab="panel-convert">✏️ かんじにする</button>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="main-content">
+
+    <!-- ── タブ1: ことばをしらべる ── -->
+    <section id="panel-search" class="panel active">
+
+      <!-- 検索ボックス -->
+      <div class="search-box">
+        <div class="search-row">
+          <input
+            type="search"
+            id="searchInput"
+            class="search-input"
+            placeholder="例：帯分数、こうごうせい、volcano"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            enterkeyhint="search"
+            aria-label="ことば検索"
+          >
+          <button id="searchBtn" class="search-btn" aria-label="検索">🔍</button>
+        </div>
+        <!-- オートコンプリート -->
+        <ul id="autocomplete" class="autocomplete-list" role="listbox"></ul>
+      </div>
+
+      <!-- 人気タグ -->
+      <div class="tag-section">
+        <div class="tag-label">🏷️ よく調べられることば</div>
+        <div class="tag-list">
+          <button class="tag-btn" style="background:#FF9A3C" data-q="帯分数">帯分数</button>
+          <button class="tag-btn" style="background:#FF9A3C" data-q="割合">割合</button>
+          <button class="tag-btn" style="background:#FF9A3C" data-q="素数">素数</button>
+          <button class="tag-btn" style="background:#FF9A3C" data-q="面積">面積</button>
+          <button class="tag-btn" style="background:#FF6B9D" data-q="主語">主語</button>
+          <button class="tag-btn" style="background:#FF6B9D" data-q="慣用句">慣用句</button>
+          <button class="tag-btn" style="background:#FF6B9D" data-q="要約">要約</button>
+          <button class="tag-btn" style="background:#6BCB77" data-q="光合成">光合成</button>
+          <button class="tag-btn" style="background:#6BCB77" data-q="食物連鎖">食物連鎖</button>
+          <button class="tag-btn" style="background:#6BCB77" data-q="電流">電流</button>
+          <button class="tag-btn" style="background:#4D96FF" data-q="三権分立">三権分立</button>
+          <button class="tag-btn" style="background:#4D96FF" data-q="憲法">憲法</button>
+          <button class="tag-btn" style="background:#4D96FF" data-q="少子高齢化">少子高齢化</button>
+          <button class="tag-btn" style="background:#4D96FF" data-q="縄文時代">縄文時代</button>
+          <button class="tag-btn" style="background:#C77DFF" data-q="地球温暖化">地球温暖化</button>
+          <button class="tag-btn" style="background:#56CFE1" data-q="リサイクル">リサイクル</button>
+        </div>
+      </div>
+
+      <!-- 検索結果エリア -->
+      <div id="resultArea" class="result-area">
+        <div class="msg-box">
+          <div class="icon">📖</div>
+          <p>ことばを入力して🔍ボタンを押してね！<br>
+          <small>算数・国語・理科・社会のことばを調べられます。</small></p>
+        </div>
+      </div>
+
+    </section><!-- /panel-search -->
+
+    <!-- ── タブ2: かんじにする ── -->
+    <section id="panel-convert" class="panel">
+
+      <div class="convert-box">
+        <label for="convertInput">ひらがなの文を入力してね（算数・国語・理科・社会の問題文も OK！）</label>
+        <textarea
+          id="convertInput"
+          class="convert-textarea"
+          placeholder="例：たいぶんすうをかぶんすうになおしましょう&#10;例：さんかくけいのめんせきをもとめなさい&#10;例：こうごうせいについてせつめいしなさい"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        ></textarea>
+
+        <!-- ふりがなトグル -->
+        <div class="ruby-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" id="rubyToggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <span>ふりがなをつける</span>
+        </div>
+
+        <div class="convert-actions">
+          <button id="convertBtn" class="convert-btn primary">✨ かんじに変換する</button>
+          <button id="convertClearBtn" class="convert-btn secondary">🗑️ クリア</button>
+        </div>
+      </div>
+
+      <!-- 変換結果エリア -->
+      <div id="convertResult"></div>
+
+      <!-- ヒントカード -->
+      <div class="hint-card">
+        <strong>💡 つかいかた</strong><br>
+        ひらがなで問題文を入力すると、教科書らしい漢字まじりの文に直してくれます。<br>
+        <strong>「ふりがなをつける」</strong> をオンにすると、読みがなも一緒に表示します。<br><br>
+        <strong>📌 対応している言葉の例</strong><br>
+        算数：たいぶんすう・めんせき・わりあい・えんしゅうりつ…<br>
+        国語：しゅご・じゅつご・だんらく・ようやく…<br>
+        理科：こうごうせい・しょくもつれんさ・でんりゅう…<br>
+        社会：さんけんぶんりつ・けんぽう・じょうもんじだい…
+      </div>
+
+    </section><!-- /panel-convert -->
+
+  </main>
+
+  <footer class="app-footer">
+    📚 ことばずかん &copy; 2024 — 小学生のための学習サポートアプリ
+  </footer>
+
+  <!-- データファイル（順番が重要！） -->
+  <script src="data/convert-map.js"></script>
+  <script src="data/dictionary.js"></script>
+  <!-- アプリロジック -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>

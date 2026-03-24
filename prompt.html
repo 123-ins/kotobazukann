@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude用プロンプト</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #FF6B9D;
+    }
+    .desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .copy-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #FF6B9D, #FF9A3C);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(255,107,157,0.4);
+      transition: transform 0.15s;
+    }
+    .copy-btn:active { transform: scale(0.97); }
+    .copy-btn.done {
+      background: linear-gradient(135deg, #6BCB77, #4D96FF);
+    }
+    .prompt-box {
+      background: #fff;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #444;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .step-box {
+      background: #FFF8F0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: #555;
+    }
+    .step-box h2 {
+      font-size: 16px;
+      color: #FF9A3C;
+      margin-bottom: 10px;
+    }
+    .step {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: flex-start;
+    }
+    .num {
+      background: #FF6B9D;
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .link {
+      color: #4D96FF;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .note {
+      background: #F0F7FF;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #4D96FF;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📋 Claude用プロンプト</h1>
+  <p class="desc">①まず下の「コピーする」ボタンを押してください。<br>②その後 claude.ai を開いて貼り付けます。</p>
+
+  <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">
+    📋 プロンプトをコピーする
+  </button>
+
+  <div class="prompt-box" id="promptText">あなたは小学生向け学習Webアプリの開発を手伝うエンジニアです。
+以下のアプリの仕様・構成を理解したうえで、改善や機能追加の相談に乗ってください。
+
+---
+
+## アプリ名
+📚 ことばずかん
+
+## アプリの概要
+小学生が「わからない言葉」「わからない漢字」を調べられるWebアプリです。
+APIなし・サーバーなし・HTML/CSS/JavaScriptだけで動く完全静的サイトです。
+iPhone の Safari からそのまま使えます。GitHub Pages で公開しています。
+
+---
+
+## 機能
+
+### タブ1「ことばをしらべる」
+- キーワード（漢字・ひらがな・英語）で辞書検索
+- 結果として「よみがな」「英語訳」「意味」「約100文字の説明」を表示
+- 入力中にリアルタイムサジェスト（最大6件）
+- 人気タグ（ボタン）をタップして一発検索
+- 結果をクリップボードにコピー可能
+- 対応教科：算数・国語・理科・社会
+
+### タブ2「かんじにする」
+- ひらがなの文を入力すると教科書らしい漢字まじり文に変換
+- 「ふりがなをつける」ON/OFF切り替えで読み仮名付き表示
+- 変換方式：左から最長一致（一回通過）方式で誤変換を防いでいる
+- 変換結果をコピー可能
+
+---
+
+## ファイル構成
+index.html           ← メインページ（エントリーポイント）
+manifest.json        ← PWA設定（ホーム画面追加対応）
+.nojekyll            ← GitHub Pages Jekyll無効化
+css/style.css        ← ポップな子ども向けデザイン
+js/app.js            ← アプリロジック（検索・変換）
+data/dictionary.js   ← ことば辞書データ（50語以上）
+data/convert-map.js  ← ひらがな→漢字変換マップ（500語超）
+
+---
+
+## データ構造
+
+### dictionary.js（辞書データ）
+const DICTIONARY = [
+  {
+    word: "帯分数",
+    read: "たいぶんすう",
+    en: "mixed number",
+    subject: "算数",
+    mean: "整数と分数をあわせた数",
+    desc: "１と２/３のように、整数と分数をいっしょに書いた数です。…"
+  },
+];
+
+### convert-map.js（変換マップ）
+const CONVERT_MAP = [
+  ["たいぶんすう", "帯分数"],
+  ["きょうだい",   "兄弟"],
+  // 500語超・長い語を先に並べる
+];
+
+---
+
+## 変換ロジックの方針
+- CONVERT_MAP は長い語が先になるようにソートして使う
+- 変換は「左から最長一致・一回通過方式」で実装している
+- 1〜2文字の短い単独エントリーは誤変換の原因になるため登録しない
+- 熟語・複合語・問題文パターンを優先して登録する
+
+---
+
+## デザイン方針
+- ポップで明るい配色（ピンク・オレンジ・黄・緑・青・紫）
+- iPhone Safari に最適化（フォント16px以上・safe-area対応）
+- タッチ操作に適した大きめボタン
+- ダークモード自動対応
+
+---
+
+## 現在の課題・今後やりたいこと
+- 辞書語をさらに増やしたい（各教科100〜200語以上）
+- 学年別モード（1〜6年で説明レベルを変える）
+- 音声読み上げ機能
+- お気に入り保存機能
+- クイズモード
+
+---
+
+このアプリに対して、以下の改善をお願いします：
+（ここに具体的な依頼を書いてください）</div>
+
+  <div class="step-box">
+    <h2>📌 コピーした後の手順</h2>
+    <div class="step">
+      <div class="num">1</div>
+      <div>上の「コピーする」ボタンを押す</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div><a class="link" href="https://claude.ai" target="_blank">claude.ai</a> を開く（タップでOK）</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div>画面下の入力欄を<strong>長押し</strong>して「ペースト」をタップ<br>（パソコンは Ctrl+V）</div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div>貼り付けた文章の一番最後<br>「<strong>（ここに具体的な依頼を書いてください）</strong>」<br>の部分を消して、やりたいことを書く</div>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <div>送信ボタンを押す ✅</div>
+    </div>
+    <div class="note">
+      💡 依頼の書き方例：<br>
+      「理科5・6年生の言葉を辞書に追加してください」<br>
+      「クイズ機能を追加してください」
+    </div>
+  </div>
+
+  <script>
+    function copyPrompt() {
+      const text = document.getElementById('promptText').innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showDone();
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showDone();
+      } catch(e) {
+        alert('コピーできませんでした。テキストを手動で選択してコピーしてください。');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showDone() {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ コピーできました！';
+      btn.classList.add('done');
+      setTimeout(() => {
+        btn.textContent = '📋 プロンプトをコピーする';
+        btn.classList.remove('done');
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>

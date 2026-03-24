@@ -1,0 +1,17 @@
+{
+  "name": "ことばずかん",
+  "short_name": "ことばずかん",
+  "description": "小学生向けことば検索・漢字変換アプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#FF6B9D",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%23FF6B9D'/><text y='145' x='20' font-size='140'>📚</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
